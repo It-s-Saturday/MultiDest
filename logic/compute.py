@@ -9,17 +9,29 @@
 #
 import Node
 
+
+def createOrigin(name: str) -> Node:
+    origin = Node.Node(name)
+    origin.setIndex(0)
+    origin.setAsOrigin()
+    return origin
+
+
+def createDestination(name: str, num_stops: int) -> Node:
+    destination = Node.Node(name)
+    destination.setIndex(num_stops + 1)
+    destination.setAsDestination()
+    return destination
+
+
 travel = {}
-
-originNode = Node.Node("Home")
-originNode.setAsOrigin()
-
-destinationNode = Node.Node("CFA")
-destinationNode.setAsDestination()
-
 stops = ["school", "LJ"]
 
-travel[originNode] = 0
+originNode = createOrigin("Home")
+
+destinationNode = createDestination("CFA", len(stops))
+
+travel[originNode] = originNode.getIndex()
 
 list_of_stops = []
 for stop in stops:
@@ -27,7 +39,7 @@ for stop in stops:
     travel[temp] = None
     list_of_stops.append(temp)
 
-travel[destinationNode] = len(stops) + 1
+travel[destinationNode] = destinationNode.getIndex()
 
 for key in travel.keys():
     print(key.__str__(), travel[key])
