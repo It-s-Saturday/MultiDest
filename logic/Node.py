@@ -49,7 +49,7 @@ class Node:
     def getDistancesToOthers(self) -> list:
         return self.distances_to_others
 
-    def setDistancestoOthers(self, distances: list):
+    def setDistancesToOthers(self, distances: list):
         self.distances_to_others = distances
 
     def getDistanceToDestination(self) -> int:

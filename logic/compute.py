@@ -10,6 +10,8 @@
 
 import Node
 import djikstra
+import djikstra2
+import tps
 
 
 def createOrigin(name: str) -> Node:
@@ -27,19 +29,19 @@ def createDestination(name: str, num_stops: int) -> Node:
 
 
 def lookup_time(start: Node, end: Node) -> int:  # fill with actual lookup
-    if start.getName() == "Home" and end.getName() == "school":
+    if start.getName() == "home" and end.getName() == "school":
         return 7
-    elif start.getName() == "Home" and end.getName() == "LJ":
+    elif start.getName() == "home" and end.getName() == "LJ":
         return 6
 
-    elif start.getName() == "school" and end.getName() == "Home":  # duplicate
+    elif start.getName() == "school" and end.getName() == "home":  # duplicate
         return 7
     elif start.getName() == "school" and end.getName() == "LJ":  # duplicate
         return 9
     elif start.getName() == "school" and end.getName() == "CFA":
         return 9
 
-    elif start.getName() == "LJ" and end.getName() == "Home":
+    elif start.getName() == "LJ" and end.getName() == "home":
         return 6
     elif start.getName() == "LJ" and end.getName() == "school":  # duplicate
         return 9
@@ -56,7 +58,7 @@ def lookup_time(start: Node, end: Node) -> int:  # fill with actual lookup
 travel = {}
 stops = ["school", "LJ"]
 
-originNode = createOrigin("Home")
+originNode = createOrigin("home")
 
 destinationNode = createDestination("CFA", len(stops))
 
@@ -88,19 +90,12 @@ for key in travel.keys():
     for other in travel.keys():
         if key != other:
             if key.getIsOrigin() and other.getIsDestination() or key.getIsDestination() and other.getIsOrigin():
-                continue
+                continue  # this is here because the point is that you MUST go to other places before the destination
             curr_key_dict[other.getName()] = lookup_time(key, other)
+        else:
+            curr_key_dict[key.getName()] = 0
     distances[key.getName()] = curr_key_dict
 
-# distances = {
-#     'B': {'A': 5, 'D': 1, 'G': 2},
-#     'A': {'B': 5, 'D': 3, 'E': 12, 'F': 5},
-#     'D': {'B': 1, 'G': 1, 'E': 1, 'A': 3},
-#     'G': {'B': 2, 'D': 1, 'C': 2},
-#     'C': {'G': 2, 'E': 1, 'F': 16},
-#     'E': {'A': 12, 'D': 1, 'C': 1, 'F': 2},
-#     'F': {'A': 5, 'E': 2, 'C': 16}}
-print(node.__str__() for node in nodes)
 print(distances)
 print(nodes)
-print(djikstra.dijkstra(nodes, distances))
+print(tps.tps(distances, originNode.getName(), destinationNode.getName()))
