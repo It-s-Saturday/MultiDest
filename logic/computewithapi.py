@@ -14,6 +14,7 @@ import djikstra2
 import tps
 import googlemaps
 
+from logic import maps
 
 
 def createOrigin(name: str) -> Node:
@@ -29,43 +30,65 @@ def createDestination(name: str, num_stops: int) -> Node:
     destination.setAsDestination()
     return destination
 
+def parseTimeFromAPI(toParse: str) -> int: # returns time in minutes
 
-def lookup_time(start: Node, end: Node) -> int:  # fill with actual lookup
-    if start.getName() == "home" and end.getName() == "school":
-        return 7
-    elif start.getName() == "home" and end.getName() == "LJ":
-        return 6
+    string = toParse.split(' ')
+    cumulative_time = 0  # time in minutes
+    for i in range(0, len(string), 2):
+        time_val = int(string[i])
+        unit = string[i + 1]
+        if "day" in unit:
+            cumulative_time += time_val * 24 * 60
+        elif "hour" in unit:
+            cumulative_time += time_val * 60
+        elif "min" in unit:
+            cumulative_time += time_val
+        else:
+            raise Exception("Unhandled time_unit greater than day")
+    return cumulative_time
 
-    elif start.getName() == "school" and end.getName() == "home":  # duplicate
-        return 7
-    elif start.getName() == "school" and end.getName() == "LJ":  # duplicate
-        return 9
-    elif start.getName() == "school" and end.getName() == "CFA":
-        return 9
-
-    elif start.getName() == "LJ" and end.getName() == "home":
-        return 6
-    elif start.getName() == "LJ" and end.getName() == "school":  # duplicate
-        return 9
-    elif start.getName() == "LJ" and end.getName() == "CFA":
-        return 6
-
-    elif start.getName() == "CFA" and end.getName() == "school":
-        return 9
-    elif start.getName() == "CFA" and end.getName() == "LJ":
-        return 6
-
+# def lookup_time(start: Node, end: Node) -> int:  # fill with actual lookup
+#     if start.getName() == "home" and end.getName() == "school":
+#         return 7
+#     elif start.getName() == "home" and end.getName() == "LJ":
+#         return 6
+#
+#     elif start.getName() == "school" and end.getName() == "home":  # duplicate
+#         return 7
+#     elif start.getName() == "school" and end.getName() == "LJ":  # duplicate
+#         return 9
+#     elif start.getName() == "school" and end.getName() == "CFA":
+#         return 9
+#
+#     elif start.getName() == "LJ" and end.getName() == "home":
+#         return 6
+#     elif start.getName() == "LJ" and end.getName() == "school":  # duplicate
+#         return 9
+#     elif start.getName() == "LJ" and end.getName() == "CFA":
+#         return 6
+#
+#     elif start.getName() == "CFA" and end.getName() == "school":
+#         return 9
+#     elif start.getName() == "CFA" and end.getName() == "LJ":
+#         return 6
 
 
 travel = {}
 
+num_stops = int(input("How many stops between origin and destination?: "))
+stops = []
 
-originNode = createOrigin("home")
-stops = ["school", "LJ"]
-destinationNode = createDestination("CFA", len(stops))
+originNode = createOrigin(input("Enter origin address or name: "))
+
+print("Where are you stopping?")
+for i in range(num_stops):
+    stops.append(input("Stop address or name: "))
+    print(stops)
+
+destinationNode = createDestination(input("Enter destination address or name: "), len(stops))
+
 
 travel[originNode] = originNode.getIndex()
-
 
 list_of_stops = []
 for stop in stops:
@@ -90,7 +113,7 @@ for key in travel.keys():
         if key != other:
             if key.getIsOrigin() and other.getIsDestination() or key.getIsDestination() and other.getIsOrigin():
                 continue  # this is here because the point is that you MUST go to other places before the destination
-            curr_key_dict[other.getName()] = lookup_time(key, other)
+            curr_key_dict[other.getName()] = parseTimeFromAPI(maps.lookup(key.getName(), other.getName()))
         else:
             curr_key_dict[key.getName()] = 0
     distances[key.getName()] = curr_key_dict
