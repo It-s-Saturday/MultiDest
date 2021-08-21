@@ -1,4 +1,4 @@
-import sys
+from numpy import inf as infinity
 
 
 class Node:
@@ -6,9 +6,9 @@ class Node:
         self.name = name
         self.index = -1
 
-        self.distance_from_origin = sys.maxsize
+        self.distance_from_origin = infinity
         self.distances_to_others = []
-        self.distance_to_destination = sys.maxsize
+        self.distance_to_destination = infinity
 
         self.isOrigin = None
         self.isDestination = None
