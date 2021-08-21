@@ -22,5 +22,5 @@ def tps(graph, origin, destination):
             cost = min(cost, c)
             out_path = path
     print(path)
-    print(cost)
+    print(str(cost) + "mins")
 

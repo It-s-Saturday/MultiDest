@@ -9,8 +9,8 @@
 # assume (for now) that going and back is equal (which it sometimes isn't)
 
 import Node
-import djikstra
-import djikstra2
+# import djikstra
+# import djikstra2
 import tps
 import googlemaps
 
@@ -117,5 +117,14 @@ for key in travel.keys():
         else:
             curr_key_dict[key.getName()] = 0
     distances[key.getName()] = curr_key_dict
+tps.tps(distances, originNode.getName(), destinationNode.getName())
 
-print(tps.tps(distances, originNode.getName(), destinationNode.getName()))
+# Origin: Kean University
+# Random Stops:
+# 3 Golf Dr, Kenilworth, NJ
+# Warinanco Park, Roselle, NJ
+# 1561 Morris Ave, Union, NJ
+# Destination:
+# 154 Summit St Newark NJ
+
+

@@ -7,18 +7,18 @@ import smtplib
 from datetime import datetime
 
 
-def lookup(origin, destination):
+def lookup(origin_in, destination_in):
     filename = open('key.txt', 'r')
 
     api_key = filename.read()
     filename.close()
 
     gmaps = googlemaps.Client(key=api_key)
-    origin = origin.replace(' ', '+')
-    destination = destination.replace(' ', '+')
+    origin = origin_in.replace(' ', '+')
+    destination = destination_in.replace(' ', '+')
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&'
     concat = url + "origins=" + origin + "&destinations=" + destination + "&key=" + api_key
-    print(concat)
+    print("Computed:", origin_in, "to", destination_in)
     r = requests.get(concat)
     try:
         time = r.json()["rows"][0]["elements"][0]["duration"]["text"]
