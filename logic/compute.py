@@ -96,6 +96,6 @@ for key in travel.keys():
             curr_key_dict[key.getName()] = 0
     distances[key.getName()] = curr_key_dict
 
-print(distances)
-print(nodes)
+# print(distances)
+# print(nodes)
 print(tps.tps(distances, originNode.getName(), destinationNode.getName()))
