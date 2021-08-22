@@ -47,31 +47,6 @@ def parseTimeFromAPI(toParse: str) -> int: # returns time in minutes
             raise Exception("Unhandled time_unit greater than day")
     return cumulative_time
 
-# def lookup_time(start: Node, end: Node) -> int:  # fill with actual lookup
-#     if start.getName() == "home" and end.getName() == "school":
-#         return 7
-#     elif start.getName() == "home" and end.getName() == "LJ":
-#         return 6
-#
-#     elif start.getName() == "school" and end.getName() == "home":  # duplicate
-#         return 7
-#     elif start.getName() == "school" and end.getName() == "LJ":  # duplicate
-#         return 9
-#     elif start.getName() == "school" and end.getName() == "CFA":
-#         return 9
-#
-#     elif start.getName() == "LJ" and end.getName() == "home":
-#         return 6
-#     elif start.getName() == "LJ" and end.getName() == "school":  # duplicate
-#         return 9
-#     elif start.getName() == "LJ" and end.getName() == "CFA":
-#         return 6
-#
-#     elif start.getName() == "CFA" and end.getName() == "school":
-#         return 9
-#     elif start.getName() == "CFA" and end.getName() == "LJ":
-#         return 6
-
 
 travel = {}
 
