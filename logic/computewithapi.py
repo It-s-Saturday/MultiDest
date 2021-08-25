@@ -21,7 +21,8 @@ DRIVING = "driving"
 WALKING = "walking"
 BIKING = "bicycling"
 TRANSIT = "transit"
-
+DURATION = "duration"
+DISTANCE = "distance"
 
 def createOrigin(name: str) -> Node:
     origin = Node.Node(name)
@@ -74,10 +75,22 @@ def parseForMethod(input):
         print("{} not recognized, setting to: Driving".format(input))
         return DRIVING
 
+def parseForChoice(input):
+    if "ti" in input.lower():
+        print("Choice set to: time")
+        return DURATION
+    elif "dis" in input.lower():
+        print("Choice set to: distance")
+        return DISTANCE
+    else:
+        print("{} not recognized, setting to: Time".format(input))
+        return DURATION
+
 
 travel = {}
 
 stops = []
+timeOrDistance = parseForChoice(input("What would you like the time or distance?"))
 
 while True:
     pull_stops = input("Pull stops from file?")
@@ -147,7 +160,7 @@ for key in travel.keys():
             #     if method == WALKING and key.getName() in distances[other.getName()]:
             #         print("skipped")
             #         continue
-            curr_key_dict[other.getName()] = parseTimeFromAPI(maps.lookup(key.getName(), other.getName(), method))
+            curr_key_dict[other.getName()] = parseTimeFromAPI(maps.lookup(key.getName(), other.getName(), method, timeOrDistance))
         else:
             curr_key_dict[key.getName()] = 0
         # print(curr_key_dict)

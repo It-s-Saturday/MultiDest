@@ -7,7 +7,7 @@ import smtplib
 from datetime import datetime
 
 
-def lookup(origin_in, destination_in, mode):
+def lookup(origin_in, destination_in, mode, choice):
     filename = open('key.txt', 'r')
 
     api_key = filename.read()
