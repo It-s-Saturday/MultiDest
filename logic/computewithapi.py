@@ -7,20 +7,21 @@
 # based on distance and time
 
 # assume (for now) that going and back is equal (which it sometimes isn't)
+from contextlib import suppress
 
 import Node
 # import djikstra
 # import djikstra2
-import tps
 from pathlib import Path
 import googlemaps
 
-from logic import maps
+from logic import maps, tsp
 
 DRIVING = "driving"
 WALKING = "walking"
 BIKING = "bicycling"
 TRANSIT = "transit"
+
 
 def createOrigin(name: str) -> Node:
     origin = Node.Node(name)
@@ -40,7 +41,10 @@ def parseTimeFromAPI(toParse: str) -> int:  # returns time in minutes
     string = toParse.split(' ')
     cumulative_time = 0  # time in minutes
     for i in range(0, len(string), 2):
-        time_val = int(string[i])
+        try:
+            time_val = int(string[i])
+        except:
+            time_val = float(string[i])
         unit = string[i + 1]
         if "day" in unit:
             cumulative_time += time_val * 24 * 60
@@ -51,6 +55,7 @@ def parseTimeFromAPI(toParse: str) -> int:  # returns time in minutes
         else:
             raise Exception("Unhandled time_unit greater than day")
     return cumulative_time
+
 
 def parseForMethod(input):
     if "driv" in input.lower():
@@ -69,27 +74,42 @@ def parseForMethod(input):
         print("{} not recognized, setting to: Driving".format(input))
         return DRIVING
 
+
 travel = {}
 
 stops = []
 
-originNode = createOrigin(input("Enter origin address or name: "))
-
-if "n" in input("Pull stops from file?"):
-    num_stops = int(input("How many stops between origin and destination?: "))
-    print("Where are you stopping?")
-    for i in range(num_stops):
-        stops.append(input("Stop address or name: "))
+while True:
+    pull_stops = input("Pull stops from file?")
+    if "n" in pull_stops:
+        originNode = createOrigin(input("Enter origin address or name: "))
+        num_stops = int(input("How many stops between origin and destination?: "))
+        print("Where are you stopping?")
+        for i in range(num_stops):
+            stops.append(input("Stop address or name: "))
+            print(stops)
+        destinationNode = createDestination(input("Enter destination address or name: "), len(stops))
+        break
+    elif "y" in pull_stops:
+        filename = input("Enter file path: ")
+        file = open(filename, encoding='utf-8-sig')
+        line_num = 0
+        for line in file.readlines():
+            if line_num == 0:  # first line
+                originNode = createOrigin(line)
+                line_num += 1
+                continue
+            stops.append(line.strip())
+            print(line, "added:", stops)
+            line_num += 1
+            print(line_num)
+        print("{} removed".format(stops[-1]))
+        stops.remove(stops[-1])
         print(stops)
-else:
-    filename = input("Enter file path: ")
-    file = open(filename, encoding='utf-8-sig')
-    for line in file.readlines():
-        stops.append(line.strip())
-        print(line, "added:", stops)
-
-destinationNode = createDestination(input("Enter destination address or name: "), len(stops))
-
+        destinationNode = createDestination(line, len(stops))  # last line (hopefully)
+        break
+    else:
+        print("Unknown input, please try again.")
 
 method = parseForMethod(input("Finally, how will you be travelling?"))
 
@@ -123,24 +143,17 @@ for key in travel.keys():
             # travel = [valub: keya]
             # skip if travel[key] == other and travel[other] == key and walking
 
-            try:
-                if method == WALKING and key.getName() in distances[other.getName()]:
-                    print("skipped")
-                    continue
-            except:
-                print("Except")
+            # with suppress(KeyError):
+            #     if method == WALKING and key.getName() in distances[other.getName()]:
+            #         print("skipped")
+            #         continue
             curr_key_dict[other.getName()] = parseTimeFromAPI(maps.lookup(key.getName(), other.getName(), method))
         else:
             curr_key_dict[key.getName()] = 0
         # print(curr_key_dict)
     distances[key.getName()] = curr_key_dict
+    print(distances)
     # print(distances)
-tps.tps(distances, originNode.getName(), destinationNode.getName())
+tsp.tsp(distances, originNode.getName(), destinationNode.getName())
 
-# Origin: Kean University
-# Random Stops:
-# 3 Golf Dr, Kenilworth, NJ
-# Warinanco Park, Roselle, NJ
-# 1561 Morris Ave, Union, NJ
-# Destination:
-# 154 Summit St Newark NJ
+# travelling salesman problem
