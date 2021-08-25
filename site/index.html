@@ -23,7 +23,29 @@
       <li class="nav-item">
         <a href="#" class="nav-link disabled">Disabled</a>
       </li>
-    </ul>
+  <p>
+      <h2>Starting Location</h2>
+    </p>
+      <input type="text" name="origin" id="origin" size="35" maxlength="40">
+      <button onclick="addelement();">Add Stop</button>
+
+      <br/><br/>
+      <ul id="thelist">
+        <li>Stop 1 <input type="text" name="stop" id="stop" size="35" maxlength="40" </li>
+        <li>Stop 2 <input type="text" name="stop" id="stop" size="35" maxlength="40" </li>
+        <li>Stop 3 <input type="text" name="stop" id="stop" size="35" maxlength="40"</li>
+      </ul>
+      <script>
+      var counter= 4;
+
+      function addelement() {
+        var completelist= document.getElementById("thelist");
+
+        completelist.innerHTML +="<li> Stop" + counter + "</li>";
+        counter++;
+      }
+      </script>
+      </ul>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
   </body>
