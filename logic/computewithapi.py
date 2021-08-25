@@ -21,6 +21,8 @@ DRIVING = "driving"
 WALKING = "walking"
 BIKING = "bicycling"
 TRANSIT = "transit"
+DURATION = "duration"
+DISTANCE = "distance"
 
 
 def createOrigin(name: str) -> Node:
@@ -37,9 +39,10 @@ def createDestination(name: str, num_stops: int) -> Node:
     return destination
 
 
-def parseTimeFromAPI(toParse: str) -> int:  # returns time in minutes
+def parseMeasurementFromAPI(toParse: str) -> int:  # returns time in minutes or distance in miles
     string = toParse.split(' ')
     cumulative_time = 0  # time in minutes
+    cumulative_distance = 0  # distance in miles
     for i in range(0, len(string), 2):
         try:
             time_val = int(string[i])
@@ -52,9 +55,14 @@ def parseTimeFromAPI(toParse: str) -> int:  # returns time in minutes
             cumulative_time += time_val * 60
         elif "min" in unit:
             cumulative_time += time_val
+        elif unit == "ft":
+            cumulative_time += time_val / 5280
+        elif unit == "mi":
+            cumulative_time += time_val
         else:
-            raise Exception("Unhandled time_unit greater than day")
+            raise Exception("Unhandled time_unit greater than day or distance greater then mile")
     return cumulative_time
+
 
 
 def parseForMethod(input):
@@ -75,9 +83,22 @@ def parseForMethod(input):
         return DRIVING
 
 
+def parseForChoice(input):
+    if "ti" in input.lower():
+        print("Choice set to: time")
+        return DURATION
+    elif "dis" in input.lower():
+        print("Choice set to: distance")
+        return DISTANCE
+    else:
+        print("{} not recognized, setting to: Time".format(input))
+        return DURATION
+
+
 travel = {}
 
 stops = []
+timeOrDistance = parseForChoice(input("What would you like the time or distance?"))
 
 while True:
     pull_stops = input("Pull stops from file?")
@@ -147,13 +168,14 @@ for key in travel.keys():
             #     if method == WALKING and key.getName() in distances[other.getName()]:
             #         print("skipped")
             #         continue
-            curr_key_dict[other.getName()] = parseTimeFromAPI(maps.lookup(key.getName(), other.getName(), method))
+            curr_key_dict[other.getName()] = parseMeasurementFromAPI(
+                maps.lookup(key.getName(), other.getName(), method, timeOrDistance))
         else:
             curr_key_dict[key.getName()] = 0
         # print(curr_key_dict)
     distances[key.getName()] = curr_key_dict
     print(distances)
     # print(distances)
-tsp.tsp(distances, originNode.getName(), destinationNode.getName())
+tsp.tsp(distances, originNode.getName(), destinationNode.getName(), timeOrDistance)
 
 # travelling salesman problem

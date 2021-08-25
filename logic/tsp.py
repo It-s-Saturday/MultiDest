@@ -3,7 +3,7 @@ from itertools import permutations
 from contextlib import suppress
 
 
-def tsp(graph, origin, destination):
+def tsp(graph, origin, destination, choice):
     out_path = []
     evaluate = []
     for permutation in permutations(graph):
@@ -29,4 +29,8 @@ def tsp(graph, origin, destination):
             out_path = path
             print("cost set to {} | path set to {}".format(cost, out_path))
     print(out_path)
-    print(str(cost) + "mins")
+    if choice == "distance":
+        print(str(cost) + " mi")
+    elif choice == "duration":
+        print(str(cost) + " mins")
+
