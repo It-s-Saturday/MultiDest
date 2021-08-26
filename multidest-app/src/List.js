@@ -21,7 +21,9 @@ class List extends React.Component{
         destinationcount: 0,
         expected_length: 0,
         destination_set: false,
-	      list: []
+	      list: [],
+
+        destination_hidden: true
 	    }
 	    // Change code above this line
 	    this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,12 +68,18 @@ class List extends React.Component{
 
     handleOriginChange(e) {
       // let origin_array = this.state.list.slice();
-      let origin_test = 0;
-      if (this.state.originInput != "") {
+      let origin_test = -1;
+      if (this.state.originInput != "" && this.state.destination_set) {
+        origin_test = 0;
+      }
+      if (this.state.originInput != "" && !this.state.destination_set) {
         origin_test = 1;
       }
+      if (this.state.originInput === "") {
+        this.state.destination_hidden = true;
+      }
       this.setState({
-
+        destination_hidden: false,
         expected_length: this.state.expected_length + origin_test,
         originInput: e.target.value,
         list: [e.target.value].concat(this.state.list.slice(1, this.state.list.length)).filter(element => element != "")
@@ -79,8 +87,11 @@ class List extends React.Component{
     }
 
     handleDestinationChange(e) {
-      const copy = this.state.list.filter(element => element != "").slice();
+      const copy = this.state.list.slice();
       copy.concat([e.target.value]);
+      if (!this.state.destination_set) {
+        this.state.list = copy;
+      }
       // var destination = {...this.state.list[this.state.list.length-1]};
       this.setState({
         destination_set: true,
@@ -114,7 +125,7 @@ class List extends React.Component{
   	        <button type="submit">Add to list</button>
             <br />
           </form>
-          <input type="text" placeholder="destination" value={this.state.destinationInput} style={textAreaStyles} onChange={this.handleDestinationChange} />
+          <input hidden={this.state.destination_hidden} type="text" placeholder="destination" value={this.state.destinationInput} style={textAreaStyles} onChange={this.handleDestinationChange} />
 	        <ol>{items}</ol>
 	      </div>
 	    );
