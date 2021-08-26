@@ -13,8 +13,14 @@ class List extends React.Component{
 	    // Change code below this line
 	    this.state = {
 	      userInput: "",
+        stops: 0,
         originInput: "",
+        origincount: 0,
+        originTrue: false,
         destinationInput: "",
+        destinationcount: 0,
+        expected_length: 0,
+        destination_set: false,
 	      list: []
 	    }
 	    // Change code above this line
@@ -24,31 +30,62 @@ class List extends React.Component{
       this.handleDestinationChange = this.handleDestinationChange.bind(this);
 	  }
 	  handleSubmit() {
-	    this.setState({
-	      list: this.state.list.concat(this.state.userInput),
-        userInput: ""
-	    });
+      let copy = this.state.list.slice();
+      let last_element = copy[-1];
+      // const t = this.state.userInput.split("\n");
+      if (copy.length <= 1 || !this.state.destination_set) {
+        this.setState({
+          // list: t,
+  	      // list: this.state.list.concat(this.state.userInput),
+          list: copy.concat(this.state.userInput),
+          userInput: "",
+          expected_length: this.state.expected_length + 1
+  	    });
+      }
+      else {
+  	    this.setState({
+          // list: t,
+  	      // list: this.state.list.concat(this.state.userInput),
+          list: [...this.state.list.slice(0, this.state.list.length-1), this.state.userInput, ...this.state.list.slice(this.state.list.length-1)].filter(element => element != ""),
+          userInput: "",
+          expected_length: this.state.expected_length + 1
+  	    });
+      }
 	  }
+
 	  handleChange(e) {
+      let input_test = -1;
+      if (this.state.userInput != "") {
+        input_test = 1;
+      }
 	    this.setState({
+        // expected_length: this.state.expected_length + input_test,
 	      userInput: e.target.value
 	    });
 	  }
 
     handleOriginChange(e) {
-      let origin_array = this.state.list.slice();
+      // let origin_array = this.state.list.slice();
+      let origin_test = 0;
+      if (this.state.originInput != "") {
+        origin_test = 1;
+      }
       this.setState({
+
+        expected_length: this.state.expected_length + origin_test,
         originInput: e.target.value,
         list: [e.target.value].concat(this.state.list.slice(1, this.state.list.length)).filter(element => element != "")
       });
     }
 
     handleDestinationChange(e) {
-
+      const copy = this.state.list.filter(element => element != "").slice();
+      copy.concat([e.target.value]);
       // var destination = {...this.state.list[this.state.list.length-1]};
       this.setState({
+        destination_set: true,
         destinationInput: e.target.value,
-        list: [...this.state.list.slice(0, this.state.list.length+1)].concat([e.target.value]).filter(element => element != "")
+        list: [...this.state.list.slice(0, this.state.expected_length), [e.target.value]].filter(element => element != "")
       });
     }
 
