@@ -75,8 +75,9 @@ class List extends React.Component{
       if (this.state.originInput != "" && !this.state.destination_set) {
         origin_test = 1;
       }
-      if (this.state.originInput === "") {
+      if (this.state.originInput == "") {
         this.state.destination_hidden = true;
+        origin_test = 0;
       }
       this.setState({
         destination_hidden: false,
@@ -91,6 +92,7 @@ class List extends React.Component{
       copy.concat([e.target.value]);
       if (!this.state.destination_set) {
         this.state.list = copy;
+        this.state.expected_length -= 1
       }
       // var destination = {...this.state.list[this.state.list.length-1]};
       this.setState({
