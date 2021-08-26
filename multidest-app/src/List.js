@@ -71,9 +71,10 @@ class List extends React.Component{
     handleOriginChange(e) {
       // let origin_array = this.state.list.slice();
       let origin_test = -1;
-      if (this.state.originInput != "" && this.state.destination_set) {
+      if (this.state.destination_set) {
         origin_test = 0;
       }
+
       if (this.state.originInput != "" && !this.state.destination_set) {
         origin_test = 1;
       }
