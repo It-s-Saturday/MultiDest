@@ -63,7 +63,7 @@ class List extends React.Component{
         input_test = 1;
       }
 	    this.setState({
-        // expected_length: this.state.expected_length + input_test,
+        expected_length: this.state.expected_length + input_test,
 	      userInput: e.target.value
 	    });
 	  }
@@ -95,7 +95,7 @@ class List extends React.Component{
       copy.concat([e.target.value]);
       if (!this.state.destination_set) {
         this.state.list = copy;
-        this.state.expected_length -= 1;
+        this.state.expected_length = copy.length;
       }
       this.state.destinationInput = "" ? false : true;
       // var destination = {...this.state.list[this.state.list.length-1]};
