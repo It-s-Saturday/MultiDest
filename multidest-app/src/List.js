@@ -23,13 +23,15 @@ class List extends React.Component{
         destination_set: false,
 	      list: [],
 
-        destination_hidden: true
+        destination_hidden: true,
+        optimize_hidden: true
 	    }
 	    // Change code above this line
 	    this.handleSubmit = this.handleSubmit.bind(this);
 	    this.handleChange = this.handleChange.bind(this);
       this.handleOriginChange = this.handleOriginChange.bind(this);
       this.handleDestinationChange = this.handleDestinationChange.bind(this);
+
 	  }
 	  handleSubmit() {
       let copy = this.state.list.slice();
@@ -92,8 +94,9 @@ class List extends React.Component{
       copy.concat([e.target.value]);
       if (!this.state.destination_set) {
         this.state.list = copy;
-        this.state.expected_length -= 1
+        this.state.expected_length -= 1;
       }
+      this.state.destinationInput = "" ? false : true;
       // var destination = {...this.state.list[this.state.list.length-1]};
       this.setState({
         destination_set: true,
@@ -109,7 +112,7 @@ class List extends React.Component{
 	      <div>
           <input type="text" placeholder="origin" value={this.state.originInput} style={textAreaStyles} onChange={this.handleOriginChange} />
           <br />
-          <form onSubmit={this.handleSubmit} action="javascript:void(0);">
+          <form onSubmit={this.handleSubmit} action="javascript:void(0)" > //TODO: add action
             <div>
               <input type ="radio" id="distance" name="optimize_for" value="distance" />
               <label for="distance_choice">distance</label>
@@ -124,11 +127,13 @@ class List extends React.Component{
   	          placeholder=''
               required
   	        />
-  	        <button type="submit">Add to list</button>
+  	        <button>Add to list</button>
             <br />
+            <button hidden={this.state.optimize_hidden} type="submit" id="submit_to_run">Optimize Route</button>
           </form>
           <input hidden={this.state.destination_hidden} type="text" placeholder="destination" value={this.state.destinationInput} style={textAreaStyles} onChange={this.handleDestinationChange} />
 	        <ol>{items}</ol>
+
 	      </div>
 	    );
 	  }
