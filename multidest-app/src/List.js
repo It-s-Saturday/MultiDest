@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import React from 'react';
-// import './App.css';
 
 const textArea = {
 	  width: 235,
@@ -26,7 +24,7 @@ class List extends React.Component{
 	  }
 
 		parseInput() {
-			const parsed = this.state.userInput.split('\n').filter(e => e != "" );
+			const parsed = this.state.userInput.split('\n').filter(e => e !== "" );
 			if (parsed.length < 4) {
 				this.setState({
 					list: [],
@@ -37,10 +35,10 @@ class List extends React.Component{
 				var visual_parsed = parsed.slice();
 				for (var i = 0; i < visual_parsed.length; i++) {
 					let t = i;
-					if (t == 0) {
+					if (t === 0) {
 						t = "Origin";
 					}
-					else if (t == visual_parsed.length-1) {
+					else if (t === visual_parsed.length-1) {
 						t = "Destination";
 					}
 					else {
@@ -100,7 +98,7 @@ class List extends React.Component{
             <br />
           </form>
           <ol>{items}</ol>
-					<button hidden={!this.state.list_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
+					<button hidden={!this.state.list_set} disabled={!this.state.choice_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
 	      </div>
 	    );
 	  }
