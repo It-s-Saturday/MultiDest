@@ -2,8 +2,9 @@ import logo from './logo.svg';
 import React from 'react';
 // import './App.css';
 
-const textAreaStyles = {
+const textArea = {
 	  width: 235,
+		height: 150,
 	  margin: 5
 	};
 
@@ -13,128 +14,93 @@ class List extends React.Component{
 	    // Change code below this line
 	    this.state = {
 	      userInput: "",
-        stops: 0,
-        originInput: "",
-        origincount: 0,
-        originTrue: false,
-        destinationInput: "",
-        destinationcount: 0,
-        expected_length: 0,
-        destination_set: false,
 	      list: [],
-
-        destination_hidden: true,
-        optimize_hidden: true
+        list_set: false,
+				choice: "",
+				choice_set: false
 	    }
 	    // Change code above this line
-	    this.handleSubmit = this.handleSubmit.bind(this);
+	    this.handleRadio = this.handleRadio.bind(this);
 	    this.handleChange = this.handleChange.bind(this);
-      this.handleOriginChange = this.handleOriginChange.bind(this);
-      this.handleDestinationChange = this.handleDestinationChange.bind(this);
-
+			this.parseInput = this.parseInput.bind(this);
 	  }
-	  handleSubmit() {
-      let copy = this.state.list.slice();
-      let last_element = copy[-1];
-      // const t = this.state.userInput.split("\n");
-      if (copy.length <= 1 || !this.state.destination_set) {
-        this.setState({
-          // list: t,
-  	      // list: this.state.list.concat(this.state.userInput),
-          list: copy.concat(this.state.userInput),
-          userInput: "",
-          expected_length: this.state.expected_length + 1
-  	    });
-      }
-      else {
-  	    this.setState({
-          // list: t,
-  	      // list: this.state.list.concat(this.state.userInput),
-          list: [...this.state.list.slice(0, this.state.list.length-1), this.state.userInput, ...this.state.list.slice(this.state.list.length-1)].filter(element => element != ""),
-          userInput: "",
-          expected_length: this.state.expected_length + 1
-  	    });
-      }
+
+		parseInput() {
+			const parsed = this.state.userInput.split('\n').filter(e => e != "" );
+			if (parsed.length < 4) {
+				this.setState({
+					list: [],
+					list_set: false
+				});
+			}
+			else {
+				var visual_parsed = parsed.slice();
+				for (var i = 0; i < visual_parsed.length; i++) {
+					let t = i;
+					if (t == 0) {
+						t = "Origin";
+					}
+					else if (t == visual_parsed.length-1) {
+						t = "Destination";
+					}
+					else {
+						t = "Stop " + i;
+					}
+					visual_parsed[i] = t + ": " + visual_parsed[i];
+				}
+
+				this.setState({
+					list: visual_parsed,
+					list_set: true
+				});
+			}
+		}
+
+	  handleRadio(e) {
+			this.setState({
+				choice: e.target.value,
+				choice_set: true
+			});
 	  }
 
 	  handleChange(e) {
-      let input_test = -1;
-      if (this.state.userInput != "") {
-        input_test = 1;
-      }
-	    this.setState({
-        expected_length: this.state.expected_length + input_test,
-	      userInput: e.target.value
-	    });
+			this.setState({
+				userInput: e.target.value
+			});
 	  }
 
-    handleOriginChange(e) {
-      // let origin_array = this.state.list.slice();
-      let origin_test = -1;
-      if (this.state.destination_set) {
-        origin_test = 0;
-      }
-
-      if (this.state.originInput != "" && !this.state.destination_set) {
-        origin_test = 1;
-      }
-      if (this.state.originInput == "") {
-        this.state.destination_hidden = true;
-        origin_test = 0;
-      }
-      this.setState({
-        destination_hidden: false,
-        expected_length: this.state.expected_length + origin_test,
-        originInput: e.target.value,
-        list: [e.target.value].concat(this.state.list.slice(1, this.state.list.length)).filter(element => element != "")
-      });
-    }
-
-    handleDestinationChange(e) {
-      const copy = this.state.list.slice();
-      copy.concat([e.target.value]);
-      if (!this.state.destination_set) {
-        this.state.list = copy;
-        this.state.expected_length = copy.length;
-      }
-      this.state.destinationInput = "" ? false : true;
-      // var destination = {...this.state.list[this.state.list.length-1]};
-      this.setState({
-        destination_set: true,
-        destinationInput: e.target.value,
-        list: [...this.state.list.slice(0, this.state.expected_length), [e.target.value]].filter(element => element != "")
-      });
-    }
-
-
 	  render() {
-	    const items = this.state.list.map(i => <li>{i}</li>)
+	    const items = this.state.list.map(i => <p>{i}</p>)
+
 	    return (
 	      <div>
-          <input type="text" placeholder="origin" value={this.state.originInput} style={textAreaStyles} onChange={this.handleOriginChange} />
+
           <br />
-          <form onSubmit={this.handleSubmit} action="javascript:void(0)" > //TODO: add action
+          <form onSubmit={this.handleSubmit} action="javascript:void(0)" >
             <div>
-              <input type ="radio" id="distance" name="optimize_for" value="distance" />
+              <input onChange={this.handleRadio} type ="radio" id="distance" name="optimize_for" value="distance" />
               <label for="distance_choice">distance</label>
-              <input type ="radio" id="timeout" name="optimize_for" value="time" />
+              <input onChange={this.handleRadio} type ="radio" id="timeout" name="optimize_for" value="time" />
               <label for="time_choice">time</label>
               </div>
             <br/>
+						<p>
+						Enter your route, with each location on a new line.
+						</p>
             <textarea
   	          onChange={this.handleChange}
   	          value={this.state.userInput}
-  	          style={textAreaStyles}
+  	          style={textArea}
   	          placeholder=''
               required
   	        />
-  	        <button>Add to list</button>
+						<br />
+  	        <button onClick={this.parseInput}>Parse route</button>
+						<p hidden={this.state.list_set}>Please add at least 2 stops.</p>
             <br />
-            <button hidden={this.state.optimize_hidden} type="submit" id="submit_to_run">Optimize Route</button>
           </form>
-          <input hidden={this.state.destination_hidden} type="text" placeholder="destination" value={this.state.destinationInput} style={textAreaStyles} onChange={this.handleDestinationChange} />
-	        <ol>{items}</ol>
-
+          <ol>{items}</ol>
+					<button hidden={!this.state.list_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
 	      </div>
 	    );
 	  }
