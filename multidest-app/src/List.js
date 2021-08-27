@@ -74,7 +74,7 @@ class List extends React.Component{
 	      <div>
 
           <br />
-          <form onSubmit={this.handleSubmit} action="javascript:void(0)" >
+          <form action="/simple_function" >
             <div>
               <input onChange={this.handleRadio} type ="radio" id="distance" name="optimize_for" value="distance" />
               <label for="distance_choice">distance</label>
@@ -93,12 +93,13 @@ class List extends React.Component{
               required
   	        />
 						<br />
-  	        <button onClick={this.parseInput}>Parse route</button>
+  	        <button onClick={this.parseInput} type="button">Parse route</button>
 						<p hidden={this.state.list_set}>Please add at least 2 stops.</p>
             <br />
+						<ol>{items}</ol>
+						<button hidden={!this.state.list_set} disabled={!this.state.choice_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
           </form>
-          <ol>{items}</ol>
-					<button hidden={!this.state.list_set} disabled={!this.state.choice_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
+
 	      </div>
 	    );
 	  }
