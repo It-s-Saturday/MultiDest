@@ -11,6 +11,7 @@ class List extends React.Component{
 	    super(props);
 	    // Change code below this line
 	    this.state = {
+			outlist: [],
 	      userInput: "",
 	      list: [],
         list_set: false,
@@ -52,7 +53,8 @@ class List extends React.Component{
 
 				this.setState({
 					list: visual_parsed,
-					list_set: true
+					list_set: true,
+					outlist: parsed
 				});
 			}
 		}

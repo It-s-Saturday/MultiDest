@@ -15,7 +15,7 @@ import Node
 from pathlib import Path
 import googlemaps
 
-from logic import maps, tsp
+import maps, tsp
 
 DRIVING = "driving"
 WALKING = "walking"
