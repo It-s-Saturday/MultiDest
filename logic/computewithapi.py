@@ -94,88 +94,88 @@ def parseForChoice(input):
         print("{} not recognized, setting to: Time".format(input))
         return DURATION
 
-def compute(distances: list):
-    travel = {}
+# def compute(distances: list):
+travel = {}
 
-    stops = []
-    timeOrDistance = parseForChoice(input("What would you like the time or distance?"))
+stops = []
+timeOrDistance = parseForChoice(input("What would you like the time or distance?"))
 
-    while True:
-        pull_stops = input("Pull stops from file?")
-        if "n" in pull_stops:
-            originNode = createOrigin(input("Enter origin address or name: "))
-            num_stops = int(input("How many stops between origin and destination?: "))
-            print("Where are you stopping?")
-            for i in range(num_stops):
-                stops.append(input("Stop address or name: "))
-                print(stops)
-            destinationNode = createDestination(input("Enter destination address or name: "), len(stops))
-            break
-        elif "y" in pull_stops:
-            filename = input("Enter file path: ")
-            file = open(filename, encoding='utf-8-sig')
-            line_num = 0
-            for line in file.readlines():
-                if line_num == 0:  # first line
-                    originNode = createOrigin(line)
-                    line_num += 1
-                    continue
-                stops.append(line.strip())
-                print(line, "added:", stops)
-                line_num += 1
-                print(line_num)
-            print("{} removed".format(stops[-1]))
-            stops.remove(stops[-1])
+while True:
+    pull_stops = input("Pull stops from file?")
+    if "n" in pull_stops:
+        originNode = createOrigin(input("Enter origin address or name: "))
+        num_stops = int(input("How many stops between origin and destination?: "))
+        print("Where are you stopping?")
+        for i in range(num_stops):
+            stops.append(input("Stop address or name: "))
             print(stops)
-            destinationNode = createDestination(line, len(stops))  # last line (hopefully)
-            break
+        destinationNode = createDestination(input("Enter destination address or name: "), len(stops))
+        break
+    elif "y" in pull_stops:
+        filename = input("Enter file path: ")
+        file = open(filename, encoding='utf-8-sig')
+        line_num = 0
+        for line in file.readlines():
+            if line_num == 0:  # first line
+                originNode = createOrigin(line)
+                line_num += 1
+                continue
+            stops.append(line.strip())
+            print(line, "added:", stops)
+            line_num += 1
+            print(line_num)
+        print("{} removed".format(stops[-1]))
+        stops.remove(stops[-1])
+        print(stops)
+        destinationNode = createDestination(line, len(stops))  # last line (hopefully)
+        break
+    else:
+        print("Unknown input, please try again.")
+
+method = parseForMethod(input("Finally, how will you be travelling?"))
+
+travel[originNode] = originNode.getIndex()
+
+list_of_stops = []
+for stop in stops:
+    temp = Node.Node(stop)
+    travel[temp] = None
+    list_of_stops.append(temp)
+
+travel[destinationNode] = destinationNode.getIndex()
+
+nodes = ()
+for node in travel.keys():
+    nodes = nodes + (node.getName(),)
+
+distances = {}
+
+# for each key in the dictionary, call lookup on key and all other keys in the dict and populate it
+# outer dict maps single source to n targets
+# inner dict gives distances TO n targets
+for key in travel.keys():
+    curr_key_dict = {}
+    for other in travel.keys():
+        print(key, other.getName())
+        if key != other:
+            if key.getIsOrigin() and other.getIsDestination() or key.getIsDestination() and other.getIsOrigin():
+                continue  # this is here because the point is that you MUST go to other places before the destination
+            # travel = [keya: valub]
+            # travel = [valub: keya]
+            # skip if travel[key] == other and travel[other] == key and walking
+
+            # with suppress(KeyError):
+            #     if method == WALKING and key.getName() in distances[other.getName()]:
+            #         print("skipped")
+            #         continue
+            curr_key_dict[other.getName()] = parseMeasurementFromAPI(
+                maps.lookup(key.getName(), other.getName(), method, timeOrDistance))
         else:
-            print("Unknown input, please try again.")
+            curr_key_dict[key.getName()] = 0
+        # print(curr_key_dict)
+    distances[key.getName()] = curr_key_dict
+    print(distances)
+    # print(distances)
+tsp.tsp(distances, originNode.getName(), destinationNode.getName(), timeOrDistance)
 
-    method = parseForMethod(input("Finally, how will you be travelling?"))
-
-    travel[originNode] = originNode.getIndex()
-
-    list_of_stops = []
-    for stop in stops:
-        temp = Node.Node(stop)
-        travel[temp] = None
-        list_of_stops.append(temp)
-
-    travel[destinationNode] = destinationNode.getIndex()
-
-    nodes = ()
-    for node in travel.keys():
-        nodes = nodes + (node.getName(),)
-
-    distances = {}
-
-    # for each key in the dictionary, call lookup on key and all other keys in the dict and populate it
-    # outer dict maps single source to n targets
-    # inner dict gives distances TO n targets
-    for key in travel.keys():
-        curr_key_dict = {}
-        for other in travel.keys():
-            print(key, other.getName())
-            if key != other:
-                if key.getIsOrigin() and other.getIsDestination() or key.getIsDestination() and other.getIsOrigin():
-                    continue  # this is here because the point is that you MUST go to other places before the destination
-                # travel = [keya: valub]
-                # travel = [valub: keya]
-                # skip if travel[key] == other and travel[other] == key and walking
-
-                # with suppress(KeyError):
-                #     if method == WALKING and key.getName() in distances[other.getName()]:
-                #         print("skipped")
-                #         continue
-                curr_key_dict[other.getName()] = parseMeasurementFromAPI(
-                    maps.lookup(key.getName(), other.getName(), method, timeOrDistance))
-            else:
-                curr_key_dict[key.getName()] = 0
-            # print(curr_key_dict)
-        distances[key.getName()] = curr_key_dict
-        print(distances)
-        # print(distances)
-    tsp.tsp(distances, originNode.getName(), destinationNode.getName(), timeOrDistance)
-
-    # travelling salesman problem
+# travelling salesman problem

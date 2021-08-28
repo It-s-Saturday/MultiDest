@@ -15,10 +15,13 @@ class List extends React.Component{
 	      list: [],
         list_set: false,
 				choice: "",
-				choice_set: false
+				choice_set: false,
+				method: "",
+				method_set: false
 	    }
 	    // Change code above this line
 	    this.handleRadio = this.handleRadio.bind(this);
+			this.handleRadio2 = this.handleRadio2.bind(this);
 	    this.handleChange = this.handleChange.bind(this);
 			this.parseInput = this.parseInput.bind(this);
 	  }
@@ -60,6 +63,13 @@ class List extends React.Component{
 				choice_set: true
 			});
 	  }
+		handleRadio2(e) {
+			this.setState({
+				method: e.target.value,
+				method_set: true
+
+			});
+		}
 
 	  handleChange(e) {
 			this.setState({
@@ -81,6 +91,16 @@ class List extends React.Component{
               <input onChange={this.handleRadio} type ="radio" id="timeout" name="optimize_for" value="time" />
               <label for="time_choice">time</label>
               </div>
+						<div>
+							<input onChange={this.handleRadio2} type="radio" id="driving" name="method" value="driving" />
+							<label for="driving-choice">driving</label>
+							<input onChange={this.handleRadio2} type="radio" id="walking" name="method" value="walking" />
+							<label for="walking-choice">walking</label>
+							<input onChange={this.handleRadio2} type="radio" id="biking" name="method" value="biking" />
+							<label for="biking-choice">biking</label>
+
+
+						</div>
             <br/>
 						<p>
 						Enter your route, with each location on a new line.
@@ -97,7 +117,7 @@ class List extends React.Component{
 						<p hidden={this.state.list_set}>Please add at least 2 stops.</p>
             <br />
 						<ol>{items}</ol>
-						<button hidden={!this.state.list_set} disabled={!this.state.choice_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
+						<button hidden={!this.state.list_set} disabled={!this.state.choice_set && !this.state.method_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
           </form>
 
 	      </div>
