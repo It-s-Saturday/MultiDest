@@ -20,6 +20,8 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html')),
-    path('simple_function', views.simple_function)
+    path('', TemplateView.as_view(template_name='index.html')),  # "home"/"landing" page
+    path('parse_function', views.parse_function)  # adding paths means having the / after the URL
+                                                  # i.e. 127.0.0.1:8000/parse_function will run parse_function()
+                                                  # in views.py
 ]
