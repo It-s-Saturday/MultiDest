@@ -8,6 +8,8 @@ from .logic import computefromdjango
 
 def simple_function(request):
     choice = request.GET.get('optimize_for')
+    if choice == "time":
+        choice = "duration"
     method = request.GET.get('method')
     lst = request.GET.get('inner_list').split("\r\n")
     origin = lst[0]
