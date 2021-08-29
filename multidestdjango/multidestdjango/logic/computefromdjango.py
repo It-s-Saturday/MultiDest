@@ -34,8 +34,7 @@ def createDestination(name: str, num_stops: int) -> Node:
 
 def parseMeasurementFromAPI(toParse: str) -> int:  # returns time in minutes or distance in miles
     string = toParse.split(' ')
-    cumulative_time = 0  # time in minutes
-    cumulative_distance = 0  # distance in miles
+    cumulative = 0
     for i in range(0, len(string), 2):
         try:
             time_val = int(string[i])
@@ -43,18 +42,18 @@ def parseMeasurementFromAPI(toParse: str) -> int:  # returns time in minutes or 
             time_val = float(string[i])
         unit = string[i + 1]
         if "day" in unit:
-            cumulative_time += time_val * 24 * 60
+            cumulative += time_val * 24 * 60
         elif "hour" in unit:
-            cumulative_time += time_val * 60
+            cumulative += time_val * 60
         elif "min" in unit:
-            cumulative_time += time_val
+            cumulative += time_val
         elif unit == "ft":
-            cumulative_time += time_val / 5280
+            cumulative += time_val / 5280
         elif unit == "mi":
-            cumulative_time += time_val
+            cumulative += time_val
         else:
-            raise Exception("Unhandled time_unit greater than day or distance greater then mile")
-    return cumulative_time
+            raise Exception("Unhandled metric greater than day or distance greater then mile")
+    return cumulative
 
 
 def parseForMethod(input):
@@ -89,25 +88,23 @@ def parseForChoice(input):
 
 def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
             i_stops: list[str]):
-    """(Choice, Method, Origin, Destination, Stops)"""
+    """This method parses user input from views.py and populates appropriate dictionaries before sending it to tsp.py"""
 
     travel = {}
     # TODO: get rid of empty elements from distances
     for entry in i_stops:
         if entry.isspace() or entry == "":
             i_stops.remove(entry)
-    stops = []
 
+    stops = []
     choice = i_choice
 
-    originNode = createOrigin(i_origin)  # create origin based on first element of distances
-    for i in range(len(i_stops)):  # with i as an iterator over the elements of distances
-        if i == 0 or i == len(i_stops) - 1:  # if it's the first or last index, skip
+    originNode = createOrigin(i_origin)
+    for i in range(len(i_stops)):
+        if i == 0 or i == len(i_stops) - 1:
             continue
         stops.append(i_stops[i])  # otherwise, add it to stops
-        # print(stops)
-    destinationNode = createDestination(i_destination,
-                                        len(stops))  # create destination based on last element of distances
+    destinationNode = createDestination(i_destination, len(stops))
 
     method = parseForMethod(i_method)
 
@@ -121,40 +118,29 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
 
     travel[destinationNode] = destinationNode.getIndex()
 
-    nodes = ()
-    for node in travel.keys():
-        nodes = nodes + (node.getName(),)
+    # nodes = ()
+    # for node in travel.keys():
+    #     nodes = nodes + (node.getName(),)
 
     distances = {}
 
     # for each key in the dictionary, call lookup on key and all other keys in the dict and populate it
     # outer dict maps single source to n targets
-    # inner dict gives distances TO n targets
+    # inner dict gives distances to n targets
     for key in travel.keys():
         curr_key_dict = {}
         for other in travel.keys():
             print(key, other.getName())
             if key != other:
                 if key.getIsOrigin() and other.getIsDestination() or key.getIsDestination() and other.getIsOrigin():
-                    continue  # this is here because the point is that you
-                    # MUST go to other places before the
-                    # destination
+                    continue  # this is here because the point is that you MUST go to other places before the destination
                 # travel = [keya: valub]
                 # travel = [valub: keya]
-                # skip if travel[key] == other and travel[other] == key and walking
 
-                # with suppress(KeyError):
-                #     if method == WALKING and key.getName() in distances[other.getName()]:
-                #         print("skipped")
-                #         continue
                 curr_key_dict[other.getName()] = parseMeasurementFromAPI(
                     maps.lookup(key.getName(), other.getName(), method, choice))
             else:
                 curr_key_dict[key.getName()] = 0
-            # print(curr_key_dict)
         distances[key.getName()] = curr_key_dict
-        print(distances)
         # print(distances)
     tsp.tsp(distances, originNode.getName(), destinationNode.getName(), i_choice)
-
-    # travelling salesman problem

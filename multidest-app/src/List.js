@@ -86,7 +86,7 @@ class List extends React.Component{
 	      <div>
 
           <br />
-          <form action="/simple_function" >
+          <form action="/parse_function" >
             <div>
               <input onChange={this.handleRadio} type ="radio" id="distance" name="optimize_for" value="distance" />
               <label for="distance_choice">distance</label>
