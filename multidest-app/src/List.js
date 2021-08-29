@@ -108,6 +108,7 @@ class List extends React.Component{
 						Enter your route, with each location on a new line.
 						</p>
             <textarea
+              name="inner_list"
   	          onChange={this.handleChange}
   	          value={this.state.userInput}
   	          style={textArea}
