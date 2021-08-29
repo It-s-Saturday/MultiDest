@@ -11,14 +11,18 @@ class List extends React.Component{
 	    super(props);
 	    // Change code below this line
 	    this.state = {
+			outlist: [],
 	      userInput: "",
 	      list: [],
         list_set: false,
 				choice: "",
-				choice_set: false
+				choice_set: false,
+				method: "",
+				method_set: false
 	    }
 	    // Change code above this line
 	    this.handleRadio = this.handleRadio.bind(this);
+			this.handleRadio2 = this.handleRadio2.bind(this);
 	    this.handleChange = this.handleChange.bind(this);
 			this.parseInput = this.parseInput.bind(this);
 	  }
@@ -49,7 +53,8 @@ class List extends React.Component{
 
 				this.setState({
 					list: visual_parsed,
-					list_set: true
+					list_set: true,
+					outlist: parsed
 				});
 			}
 		}
@@ -60,6 +65,13 @@ class List extends React.Component{
 				choice_set: true
 			});
 	  }
+		handleRadio2(e) {
+			this.setState({
+				method: e.target.value,
+				method_set: true
+
+			});
+		}
 
 	  handleChange(e) {
 			this.setState({
@@ -74,18 +86,29 @@ class List extends React.Component{
 	      <div>
 
           <br />
-          <form onSubmit={this.handleSubmit} action="javascript:void(0)" >
+          <form action="/simple_function" >
             <div>
               <input onChange={this.handleRadio} type ="radio" id="distance" name="optimize_for" value="distance" />
               <label for="distance_choice">distance</label>
               <input onChange={this.handleRadio} type ="radio" id="timeout" name="optimize_for" value="time" />
               <label for="time_choice">time</label>
               </div>
+						<div>
+							<input onChange={this.handleRadio2} type="radio" id="driving" name="method" value="driving" />
+							<label for="driving-choice">driving</label>
+							<input onChange={this.handleRadio2} type="radio" id="walking" name="method" value="walking" />
+							<label for="walking-choice">walking</label>
+							<input onChange={this.handleRadio2} type="radio" id="biking" name="method" value="biking" />
+							<label for="biking-choice">biking</label>
+
+
+						</div>
             <br/>
 						<p>
 						Enter your route, with each location on a new line.
 						</p>
             <textarea
+              name="inner_list"
   	          onChange={this.handleChange}
   	          value={this.state.userInput}
   	          style={textArea}
@@ -93,12 +116,13 @@ class List extends React.Component{
               required
   	        />
 						<br />
-  	        <button onClick={this.parseInput}>Parse route</button>
+  	        <button onClick={this.parseInput} type="button">Parse route</button>
 						<p hidden={this.state.list_set}>Please add at least 2 stops.</p>
             <br />
+						<ol>{items}</ol>
+						<button hidden={!this.state.list_set} disabled={!this.state.choice_set && !this.state.method_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
           </form>
-          <ol>{items}</ol>
-					<button hidden={!this.state.list_set} disabled={!this.state.choice_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
+
 	      </div>
 	    );
 	  }
