@@ -93,8 +93,11 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
     travel = {}
     # TODO: get rid of empty elements from distances
     for entry in i_stops:
-        if entry.isspace() or entry == "":
+        if  entry.strip() == "":
             i_stops.remove(entry)
+    if len(i_stops) <= 1:
+        raise Exception("Invalid text Input")
+
 
     stops = []
     choice = i_choice
