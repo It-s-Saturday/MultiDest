@@ -133,7 +133,7 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
     for key in travel.keys():
         curr_key_dict = {}
         for other in travel.keys():
-            print(key, other.getName())
+            print(key.getName(), other.getName())
             if key != other:
                 if key.getIsOrigin() and other.getIsDestination() or key.getIsDestination() and other.getIsOrigin():
                     continue  # this is here because the point is that you MUST go to other places before the destination
