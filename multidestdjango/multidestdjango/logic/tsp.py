@@ -4,6 +4,7 @@ from contextlib import suppress
 
 
 def tsp(graph, origin, destination, choice):
+    print("Start TSP")
     out_path = []
     evaluate = []
     for permutation in permutations(graph):  # permutations(graph) returns a list of all combinations of the routes
@@ -15,20 +16,24 @@ def tsp(graph, origin, destination, choice):
             continue
         evaluate.append(permutation)  # construct a list of permutations to evaulate
     cost = infinity  # set cost equal to max value
+    # print("evaluate set as", str(evaluate))
     for path in evaluate:  # for each path in evaluate,
         i = 0  # initialize iterator for this path
         c = 0  # initialize current cost
         while path[i] != path[-1]:  # iterate over path from first element to the last, excluding the last (see line 24)
                                     # i.e. ignore a -> c since they can't go direct from origin to dest
             with suppress(KeyError):  # ignores KeyErrors created when we skipped over duplicates on line 12
+                # print("Calculated")
                 temp_c = graph[path[i]][path[i + 1]]    # grabs the maps.py calculated value associated with the current
                                                         # position and the next position
                 c += temp_c  # add onto the growing cost of the current path
+            i += 1  # increment i (see line 21)
         if cost != min(cost, c):  # if the cost != to the expression, it means it must be lower
             cost = min(cost, c)  # update new lowest cost
             out_path = path  # set out_path to this lowest cost path
             print("cost set to {} | path set to {}".format(cost, out_path))
-        i += 1  # increment i (see line 21)
+
+        # print("+1")
     # TODO: return the output as a string to computefromdjango.py
     print(out_path)
     if choice == "distance":

@@ -8,6 +8,7 @@ from datetime import datetime
 
 
 def lookup(origin_in, destination_in, mode, choice):
+    print("Start lookup:", origin_in, destination_in, "with", mode, choice)
     filename = open('multidestdjango/logic/key.txt', 'r')  # open the key.txt file on local machine
     api_key = filename.read()  # set api_key to file content
     filename.close()
