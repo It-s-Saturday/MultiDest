@@ -27,16 +27,16 @@ def show_results(request):
         </html>
     """)
 
-@ensure_csrf_cookie
+# @ensure_csrf_cookie
 def parse_function(request):
     """
     This function parses the information from the react form into our computation script using a GET request.
     """
-    choice = request.POST.get('optimize_for')
+    choice = request.GET.get('optimize_for')
     if choice == "time":
         choice = "duration"
-    method = request.POST.get('method')
-    lst = request.POST.get('inner_list').split("\r\n")  # note that lst contains every entry from the textarea
+    method = request.GET.get('method')
+    lst = request.GET.get('inner_list').split("\r\n")  # note that lst contains every entry from the textarea
     print(lst)
     origin = lst[0]
     dest = lst[-1]
@@ -44,4 +44,4 @@ def parse_function(request):
     # print(choice, method, origin, lst, dest)
     # print("*****************************************")
     computefromdjango.compute(choice, method, origin, dest, lst)
-    return HttpResponse(show_results)
+    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
