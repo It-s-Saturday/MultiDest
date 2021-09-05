@@ -3,20 +3,25 @@ from itertools import permutations
 from contextlib import suppress
 
 
-def tsp(graph, origin, destination, choice):
+def tsp(graph: dict[dict], origin, destination, choice):
     print("Start TSP")
     out_path = []
     evaluate = []
-    for permutation in permutations(graph):  # permutations(graph) returns a list of all combinations of the routes
-                                             # i.e. input: [a, b, c]
-                                             # permutations = [[a,b,c], [a,c,b], [b,a,c], [b,c,a], [c,a,b], [c,b,a]]
+    for permutation in permutations(graph):  # permutations(graph) returns a list of all combinations of the
+                                                    # routes
+                                                 # i.e. input: [a, b, c]
+                                                 # permutations = [[a,b,c], [a,c,b], [b,a,c], [b,c,a], [c,a,b], [c,b,a]]
+        if permutation[0] == destination:
+            break
         if permutation[0] != origin or permutation[-1] != destination:  # ignore permutations where our origin and
-                                                                        # destination are not
+            #print("Bad hair day!")                                      # destination are not
                                                                         # where they're supposed to be
             continue
+       # print(permutation)
         evaluate.append(permutation)  # construct a list of permutations to evaulate
     cost = infinity  # set cost equal to max value
     # print("evaluate set as", str(evaluate))
+    c_calc = 0
     for path in evaluate:  # for each path in evaluate,
         i = 0  # initialize iterator for this path
         c = 0  # initialize current cost
@@ -26,16 +31,18 @@ def tsp(graph, origin, destination, choice):
                 # print("Calculated")
                 temp_c = graph[path[i]][path[i + 1]]    # grabs the maps.py calculated value associated with the current
                                                         # position and the next position
-                c += temp_c  # add onto the growing cost of the current path
+                c += temp_c     # add onto the growing cost of the current path
+                if c > cost:    #  ignore rest of path if intermediate cost is already greater
+                    break       #  James Tiu
             i += 1  # increment i (see line 21)
+            c_calc += 1
         if cost != min(cost, c):  # if the cost != to the expression, it means it must be lower
             cost = min(cost, c)  # update new lowest cost
             out_path = path  # set out_path to this lowest cost path
-            print("cost set to {} | path set to {}".format(cost, out_path))
-
-        # print("+1")
+            # print("cost set to {} | path set to {}".format(cost, out_path))
+            print("New Min: {}".format(cost))
+    print(c_calc, "routes calculated")
     # TODO: return the output as a string to computefromdjango.py
-    # print(out_path)
     # return list with first element as path and second element as metric
     out_metric = ""
     if choice == "distance":

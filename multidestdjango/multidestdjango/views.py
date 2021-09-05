@@ -11,34 +11,12 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .logic import computefromdjango
 
 
-class Output:
-    def __init__(self):
-        self.out = ""
-
-    def setOut(self, ini):
-        self.out = ini
-
-    def getOut(self):
-        return self.out
-
-
-output = Output()
-
-
 def csrf(request):
     return JsonResponse({'csrfToken': get_token(request)})
 
 
 def ping(request):
     return JsonResponse({'result': 'OK'})
-
-
-def show_results(request):
-    obj = output.getOut()
-    out = ""
-    for elem in obj:
-        out += str(elem) + "<br>"
-    return HttpResponse(out)
 
 
 def parse_function(request):
@@ -57,7 +35,6 @@ def parse_function(request):
     # print(choice, method, origin, lst, dest)
     # print("*****************************************")
     computed = computefromdjango.compute(choice, method, origin, dest, lst)
-    output.setOut(computed)
-    context = {}
-    context['result'] = str(output.getOut())
+    context = {'path': str(computed[0]), 'metric': computed[1]}
+
     return render(request, 'results.html', context)
