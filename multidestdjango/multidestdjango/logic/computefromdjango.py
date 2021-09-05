@@ -93,7 +93,7 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
     travel = {}
     # TODO: get rid of empty elements from distances
     for entry in i_stops:
-        if  entry.strip() == "":
+        if entry.strip() == "":
             i_stops.remove(entry)
     if len(i_stops) <= 1:
         raise Exception("Invalid text Input")
@@ -146,5 +146,5 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
                 curr_key_dict[key.getName()] = 0
         distances[key.getName()] = curr_key_dict
         # print(distances)
-    out = tsp.tsp(distances, originNode.getName(), destinationNode.getName(), i_choice)
-    print(out)
+    return tsp.tsp(distances, originNode.getName(), destinationNode.getName(), i_choice)
+

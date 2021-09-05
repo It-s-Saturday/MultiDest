@@ -1,14 +1,28 @@
 from django.conf.urls import url
 from django.middleware.csrf import get_token
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
+from django.urls import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .logic import computefromdjango
 
+
+class Output:
+    def __init__(self):
+        self.out = ""
+
+    def setOut(self, ini):
+        self.out = ini
+
+    def getOut(self):
+        return self.out
+
+
+output = Output()
 
 
 def csrf(request):
@@ -20,10 +34,13 @@ def ping(request):
 
 
 def show_results(request):
-    return HttpResponse('results')
+    obj = output.getOut()
+    out = ""
+    for elem in obj:
+        out += str(elem) + "<br>"
+    return HttpResponse(out)
 
 
-# @ensure_csrf_cookie
 def parse_function(request):
     """
     This function parses the information from the react form into our computation script using a GET request.
@@ -39,5 +56,8 @@ def parse_function(request):
     # print("*****************************************")
     # print(choice, method, origin, lst, dest)
     # print("*****************************************")
-    computefromdjango.compute(choice, method, origin, dest, lst)
-    return HttpResponse("""<html><script>window.location.replace('/');</script></html>""")
+    computed = computefromdjango.compute(choice, method, origin, dest, lst)
+    output.setOut(computed)
+    context = {}
+    context['result'] = str(output.getOut())
+    return render(request, 'results.html', context)

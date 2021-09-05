@@ -37,8 +37,6 @@ def tsp(graph, origin, destination, choice):
     # TODO: return the output as a string to computefromdjango.py
     # print(out_path)
     # return list with first element as path and second element as metric
-
-    out_first = out_path
     out_metric = ""
     if choice == "distance":
         cost = round(cost, 2)
