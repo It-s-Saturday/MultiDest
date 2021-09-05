@@ -35,10 +35,14 @@ def tsp(graph, origin, destination, choice):
 
         # print("+1")
     # TODO: return the output as a string to computefromdjango.py
-    print(out_path)
+    # print(out_path)
+    # return list with first element as path and second element as metric
+
+    out_first = out_path
+    out_metric = ""
     if choice == "distance":
         cost = round(cost, 2)
-        print(str(cost) + " mi")
+        out_metric = str(cost) + " mi"
     elif choice == "duration":
         out_hour = ""
         out_min = ""
@@ -54,7 +58,8 @@ def tsp(graph, origin, destination, choice):
             else:
                 out_min = "mins"
 
-            print(str(hours_cost) + " {} and ".format(out_hour) + str(mins_cost) + " {}".format(out_min))
+            out_metric = str(hours_cost) + " {} and ".format(out_hour) + str(mins_cost) + " {}".format(out_min)
         else:
-            print(str(cost) + " mins")
+            out_metric = str(cost) + " mins"
 
+    return [out_path, out_metric]
