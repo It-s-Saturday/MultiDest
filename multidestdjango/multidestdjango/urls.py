@@ -25,6 +25,7 @@ urlpatterns = [
                                                    # i.e. 127.0.0.1:8000/parse_function will run parse_function()
                                                    # in views.py
     path('show_results', views.show_results),
+    # path('results', views.results),
     path('csrf/', views.csrf),
     path('ping/', views.ping),
 ]
