@@ -5,6 +5,6 @@
 
 <img src="concept-1.png" alt="concept map" width="300" height="300"/>
 
-![](walkthrough.gif)
+![](walkthrough1.gif)
 
 *Not for commercial-use or redistribution yet please!
