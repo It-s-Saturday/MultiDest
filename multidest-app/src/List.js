@@ -49,6 +49,7 @@ class List extends React.Component {
         method_set: false,
         testGet: 'KO',
         testPost: 'KO',
+				enable_optimize: this.choice_set && this.method_set,
     }
     // Change code above this line
     this.handleRadio = this.handleRadio.bind(this);
@@ -155,7 +156,7 @@ class List extends React.Component {
                         <p hidden={this.state.list_set}>Please add at least 2 stops.</p>
             <br />
                         <ol>{items}</ol>
-                        <button hidden={!this.state.list_set} disabled={!this.state.choice_set && !this.state.method_set} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
+                        <button hidden={!this.state.list_set} disabled={this.state.enable_optimize} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
           </form>
         <p>Test GET request: {this.state.testGet}</p>
         <p>Test POST request: {this.state.testPost}</p>

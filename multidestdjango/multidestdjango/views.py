@@ -9,23 +9,19 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .logic import computefromdjango
 
+
+
 def csrf(request):
     return JsonResponse({'csrfToken': get_token(request)})
+
 
 def ping(request):
     return JsonResponse({'result': 'OK'})
 
 
 def show_results(request):
-    return HttpResponse("""
-        <html>
-            <p>This is the results screen</p>
+    return HttpResponse('results')
 
-
-
-
-        </html>
-    """)
 
 # @ensure_csrf_cookie
 def parse_function(request):
