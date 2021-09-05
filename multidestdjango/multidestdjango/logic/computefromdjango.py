@@ -85,6 +85,15 @@ def parseForChoice(input):
         print("{} not recognized, setting to: Time".format(input))
         return DURATION
 
+# def arrowify(input: tuple):
+#     print("Arrowify")
+#     out = ""
+#     for place in input:
+#         if place != input[-1]:
+#             out += str(place) + "->"
+#     out += str(input[-1])
+#     print(out)
+#     return out
 
 def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
             i_stops: list[str]):
@@ -130,10 +139,11 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
     # for each key in the dictionary, call lookup on key and all other keys in the dict and populate it
     # outer dict maps single source to n targets
     # inner dict gives distances to n targets
+    m_count = 0
     for key in travel.keys():
         curr_key_dict = {}
         for other in travel.keys():
-            print(key.getName(), other.getName())
+            # print(key.getName(), other.getName())
             if key != other:
                 if key.getIsOrigin() and other.getIsDestination() or key.getIsDestination() and other.getIsOrigin():
                     continue  # this is here because the point is that you MUST go to other places before the destination
@@ -142,9 +152,10 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
 
                 curr_key_dict[other.getName()] = parseMeasurementFromAPI(
                     maps.lookup(key.getName(), other.getName(), method, choice))
+                m_count += 1
             else:
                 curr_key_dict[key.getName()] = 0
         distances[key.getName()] = curr_key_dict
-        # print(distances)
+    print(m_count, "intermediate routes calculated!")
     return tsp.tsp(distances, originNode.getName(), destinationNode.getName(), i_choice)
 
