@@ -84,19 +84,17 @@ function App() {
     catch(e) { console.error(e); }
 }
 
-  const handleAddFields = id => {
-    let values = [...inputFields];
-    let temp = values.findIndex(value => value.id === id) + 1;
-    // console.log(temp)
-    values.splice(temp, 0, {id: uuidv4(), stop: ''});
-    setInputFields(values);
-  }
+const handleAddFields = id => {
+  const values  = [...inputFields];
+  values.splice(values.findIndex(value => value.id === id)+1, 0, {id: uuidv4(), stop: ''});
+  setInputFields(values);
+}
 
-  const handleRemoveFields = id => {
-    const values  = [...inputFields];
-    values.splice(values.findIndex(value => value.id === id), 1);
-    setInputFields(values);
-  }
+const handleRemoveFields = id => {
+  const values  = [...inputFields];
+  values.splice(values.findIndex(value => value.id === id), 1);
+  setInputFields(values);
+}
 
 
   return (
@@ -122,7 +120,6 @@ function App() {
       </div>
       </div>
         { inputFields.map(inputField => (
-          <div>
           <div key={inputField.id}>
             <TextField
               name="stop"
@@ -141,15 +138,9 @@ function App() {
               <AddIcon />
             </IconButton>
           </div>
-          </div>
         )) }
 
-        <Button
-          className={classes.button}
-          variant="contained"
-          onClick={() => parseInput()}
-        >Parse
-        </Button>
+
         <button className={classes.button} disabled={inputFields.length < 4} type="submit" id="submit_to_run">travel</button>
       </form>
     </Container>
