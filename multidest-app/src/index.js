@@ -4,11 +4,17 @@ import List from './List';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <List />
+//   </React.StrictMode>,
+//   document.getElementById('list_container')
+// );
 ReactDOM.render(
   <React.StrictMode>
-    <List />
+    <App />
   </React.StrictMode>,
-  document.getElementById('list_container')
+  document.getElementById('app_container')
 );
 //ReactDOM.render(
 //    <App />,

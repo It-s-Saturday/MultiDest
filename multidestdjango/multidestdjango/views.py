@@ -27,7 +27,7 @@ def parse_function(request):
     if choice == "time":
         choice = "duration"
     method = request.GET.get('method')
-    lst = request.GET.get('inner_list').split("\r\n")  # note that lst contains every entry from the textarea
+    lst = request.GET.getlist('stop')  # note that lst contains every entry from the textarea
     print(lst)
     origin = lst[0]
     dest = lst[-1]
