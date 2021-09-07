@@ -158,8 +158,6 @@ class List extends React.Component {
                         <ol>{items}</ol>
                         <button hidden={!this.state.list_set} disabled={this.state.enable_optimize} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
           </form>
-        <p>Test GET request: {this.state.testGet}</p>
-        <p>Test POST request: {this.state.testPost}</p>
           </div>
         );
     }
