@@ -1,38 +1,5 @@
 import React from 'react';
 
-const API_HOST = 'http://localhost:8000';
-let _csrfToken = null;
-
-const textArea = {
-	  width: 235,
-		height: 150,
-	  margin: 5
-	};
-
-async function getCsrfToken() {
-  if (_csrfToken === null) {
-    const response = await fetch(`${API_HOST}/csrf/`, {
-      credentials: 'include',
-    });
-    const data = await response.json();
-    _csrfToken = data.csrfToken;
-  }
-  return _csrfToken;
-}
-
-async function testRequest(method) {
-  const response = await fetch(`${API_HOST}/ping/`, {
-    method: method,
-    headers: (
-      method === 'POST'
-        ? {'X-CSRFToken': await getCsrfToken()}
-        : {}
-    ),
-    credentials: 'include',
-  });
-  const data = await response.json();
-  return data.result;
-}
 
 class List extends React.Component {
     constructor(props) {
@@ -47,8 +14,6 @@ class List extends React.Component {
         choice_set: false,
         method: "",
         method_set: false,
-        testGet: 'KO',
-        testPost: 'KO',
 				enable_optimize: this.choice_set && this.method_set,
     }
     // Change code above this line
@@ -57,12 +22,7 @@ class List extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.parseInput = this.parseInput.bind(this);
     }
-    async componentDidMount() {
-        this.setState({
-          testGet: await testRequest('GET'),
-          testPost: await testRequest('POST'),
-        });
-    }
+
     parseInput() {
         const parsed = this.state.userInput.split('\n').filter(e => e !== "" );
         if (parsed.length < 4) {
@@ -115,6 +75,7 @@ class List extends React.Component {
         });
     }
 
+
     render() {
         const items = this.state.list.map(i => <p>{i}</p>)
 
@@ -140,17 +101,6 @@ class List extends React.Component {
 
                         </div>
             <br/>
-                        <p>
-                        Enter your route, with each location on a new line.
-                        </p>
-            <textarea
-              name="inner_list"
-              onChange={this.handleChange}
-              value={this.state.userInput}
-              style={textArea}
-              placeholder=''
-              required
-            />
                         <br />
             <button onClick={this.parseInput} type="button">Parse route</button>
                         <p hidden={this.state.list_set}>Please add at least 2 stops.</p>
@@ -158,8 +108,6 @@ class List extends React.Component {
                         <ol>{items}</ol>
                         <button hidden={!this.state.list_set} disabled={this.state.enable_optimize} type="submit" id="submit_to_run">Optimize Route for {this.state.choice}</button>
           </form>
-        <p>Test GET request: {this.state.testGet}</p>
-        <p>Test POST request: {this.state.testPost}</p>
           </div>
         );
     }
