@@ -3,6 +3,7 @@ from django.middleware.csrf import get_token
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
+import time
 
 # Create your views here.
 from django.urls import reverse
@@ -23,6 +24,9 @@ def parse_function(request):
     """
     This function parses the information from the react form into our computation script using a GET request.
     """
+
+    start = time.time()
+
     choice = request.GET.get('optimize_for')
     if choice == "time":
         choice = "duration"
@@ -35,6 +39,6 @@ def parse_function(request):
     # print(choice, method, origin, lst, dest)
     # print("*****************************************")
     computed = computefromdjango.compute(choice, method, origin, dest, lst)
-    context = {'path': str(computed[0]), 'metric': computed[1]}
+    context = {'path': str(computed[0]), 'metric': computed[1], 'runtime': round(time.time() - start, 2)}
 
     return render(request, 'results.html', context)
