@@ -1,7 +1,15 @@
+html, body {
+  scroll-behavior: smooth;
+  margin: 0;
+  height: 100%;
+  overflow: hidden
+}
+
 #nav-id {
   position: fixed;
   display: flex;
   width: 100%;
+  z-index: 999;
 }
 
 #top, #about, #team {
@@ -11,6 +19,14 @@
   align-items: center;
   width: 100%;
   height: 100vh;
+}
+
+.down {
+  margin-top: 10%;
+}
+
+.up {
+  margin-bottom: 10%;
 }
 
 #logo {

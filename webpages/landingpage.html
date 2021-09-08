@@ -10,6 +10,10 @@
     <builder-component model="page" api-key="bpk-801b616f2d444797895ae09f4704ee00"></builder-component>
   <link rel="stylesheet" href="landingcss.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" integrity="sha384-tKLJeE1ALTUwtXlaGjJYM3sejfssWdAaWR2s97axw4xkiAdMzQjtOjgcyw0Y50KU" crossorigin="anonymous">
+  <script type="text/javascript" src="landing.js">
+
+  </script>
 </head>
 
 <body>
@@ -33,6 +37,7 @@
     </div>
   </nav>
   <div class="container">
+
     <section id="top">
       <img id="logo" src="multidestlogo.png" alt="" class="d-flex justify-content-center">
       <div class="d-flex justify-content-center">
@@ -44,19 +49,33 @@
       <div class="row">
         <button id="travelbtn" type="button" class="btn btn-primary btn-sm">Let's Travel</button>
       </div>
+      <span class="down">
+      <a href="#about"><button class="btn btn-btn-secondary"><i id="top-down" class="bi bi-arrow-bar-down"></i></button></a>
+      </span>
     </section>
+
     <section id="about">
+      <span class="up">
+      <a href="#top"><button class="btn btn-btn-secondary"><i id="top-down" class="bi bi-arrow-bar-up"></i></button></a>
+      </span>
       <h1 class="justify-content-center">What's MultiDest about?</h1>
       <div id="about-content" class="">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       </div>
+      <span class="down">
+      <a href="#team"><button class="btn btn-btn-secondary"><i id="top-down" class="bi bi-arrow-bar-down"></i></button></a>
+      </span>
     </section>
+
     <section id="team">
+      <span class="up">
+      <a href="#about"><button class="btn btn-btn-secondary"><i id="top-down" class="bi bi-arrow-bar-up"></i></button></a>
+      </span>
       <h1 class="justify-content-center">Meet the Team!</h1>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
     </section>
 
-
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15.0.0/dist/smooth-scroll.polyfills.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
 </body>
