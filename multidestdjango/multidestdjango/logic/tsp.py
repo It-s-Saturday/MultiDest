@@ -23,9 +23,9 @@ def tsp(graph: dict[dict], origin, destination, choice):
     # print("evaluate set as", str(evaluate))
     c_calc = 0
     for path in evaluate:  # for each path in evaluate,
-        i = 0  # initialize iterator for this path
+        # i = 0  # initialize iterator for this path
         c = 0  # initialize current cost
-        while path[i] != path[-1]:  # iterate over path from first element to the last, excluding the last (see line 24)
+        for i in range(0, len(path)-1):  # iterate over path from first element to the last, excluding the last (see line 24)
                                     # i.e. ignore a -> c since they can't go direct from origin to dest
             with suppress(KeyError):  # ignores KeyErrors created when we skipped over duplicates on line 12
                 # print("Calculated")
@@ -34,7 +34,7 @@ def tsp(graph: dict[dict], origin, destination, choice):
                 c += temp_c     # add onto the growing cost of the current path
                 if c > cost:    #  ignore rest of path if intermediate cost is already greater
                     break       #  James Tiu
-            i += 1  # increment i (see line 21)
+            # i += 1  # increment i (see line 21)
             c_calc += 1
         if cost != min(cost, c):  # if the cost != to the expression, it means it must be lower
             cost = min(cost, c)  # update new lowest cost
@@ -51,25 +51,7 @@ def tsp(graph: dict[dict], origin, destination, choice):
     elif choice == "duration":
         out_hour = ""
         out_min = ""
-        out_day = ""
-        if cost > 1440:
-            days_cost = cost // (24*60)
-            hours_cost = (cost // 60) % 24
-            mins_cost = cost % 24 % 60
-            if days_cost == 1:
-                out_day = "day"
-            else:
-                out_day = "days"
-            if hours_cost == 1:
-                out_hour = "hour"
-            else:
-                out_hour = "hours"
-            if mins_cost == 1:
-                out_min = "min"
-            else:
-                out_min = "mins"
-            out_metric = str(days_cost) + " {}, ".format(out_day) + str(hours_cost) + " {}, and ".format(out_hour) + str(mins_cost) + " {}".format(out_min)
-        elif cost >= 60 and cost < 1440:
+        if cost >= 60:
             hours_cost = cost // 60
             mins_cost = cost % 60
             if hours_cost == 1:
@@ -81,7 +63,7 @@ def tsp(graph: dict[dict], origin, destination, choice):
             else:
                 out_min = "mins"
 
-            out_metric = str(hours_cost) + " {}, and ".format(out_hour) + str(mins_cost) + " {}".format(out_min)
+            out_metric = str(hours_cost) + " {} and ".format(out_hour) + str(mins_cost) + " {}".format(out_min)
         else:
             out_metric = str(cost) + " mins"
 
