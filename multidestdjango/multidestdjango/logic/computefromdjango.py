@@ -9,6 +9,7 @@
 # assume (for now) that going and back is equal (which it sometimes isn't)
 
 from . import maps, tsp, Node
+from .namelookup import namelookup
 
 DRIVING = "driving"
 WALKING = "walking"
@@ -124,6 +125,7 @@ def compute(i_choice: str, i_method: str, i_origin: str, i_destination: str,
 
     list_of_stops = []
     for stop in stops:
+        stop = namelookup(stop)
         temp = Node.Node(stop)
         travel[temp] = None
         list_of_stops.append(temp)
