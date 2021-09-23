@@ -39,6 +39,9 @@ def parse_function(request):
     # print(choice, method, origin, lst, dest)
     # print("*****************************************")
     computed = computefromdjango.compute(choice, method, origin, dest, lst)
-    context = {'path': str(computed[0]), 'metric': computed[1], 'runtime': round(time.time() - start, 2)}
+    good_out_path = ""
+    for stop in computed[0]:
+        good_out_path += stop + "<br />"
+    context = {'path': str(good_out_path), 'metric': computed[1], 'runtime': round(time.time() - start, 2)}
 
     return render(request, 'results.html', context)

@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-
 function App() {
   var list = [];
   const classes = useStyles()
@@ -79,27 +78,28 @@ function App() {
                 console.log(parsed[i]['stop']);
     }
     try {
-    alert(parsed[0]['stop'] + "\n" + stops + parsed[parsed.length-1]['stop']);
+      alert(parsed[0]['stop'] + "\n" + stops + parsed[parsed.length-1]['stop']);
     }
     catch(e) { console.error(e); }
-}
+  }
 
-const handleAddFields = id => {
-  const values  = [...inputFields];
-  values.splice(values.findIndex(value => value.id === id)+1, 0, {id: uuidv4(), stop: ''});
-  setInputFields(values);
-}
+  const handleAddFields = id => {
+    const values  = [...inputFields];
+    values.splice(values.findIndex(value => value.id === id)+1, 0, {id: uuidv4(), stop: ''});
+    setInputFields(values);
+  }
 
-const handleRemoveFields = id => {
-  const values  = [...inputFields];
-  values.splice(values.findIndex(value => value.id === id), 1);
-  setInputFields(values);
-}
+  const handleRemoveFields = id => {
+    const values  = [...inputFields];
+    values.splice(values.findIndex(value => value.id === id), 1);
+    setInputFields(values);
+  }
 
 
   return (
     <Container>
-    <h1>Start App.js</h1>
+//    <h1>Start App.js</h1>
+
       <form className={classes.root} method="GET" action="/parse_function">
       <div>
       <div>
@@ -143,6 +143,7 @@ const handleRemoveFields = id => {
 
         <button className={classes.button} disabled={inputFields.length < 4} type="submit" id="submit_to_run">travel</button>
       </form>
+
     </Container>
   );
 }
