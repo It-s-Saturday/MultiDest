@@ -1,6 +1,6 @@
 # MultiDest
 
-## Edit: Development halted until further notice (forever!). Well done everyone and I hope someone out there can pick it up
+## Double Edit: ~~Development~~Deployment in progress 👀
 
 ## With the way Google Maps is currently set up, users can input an origin, a number of "stops" and a destination. 
 ### Our goal is to optimize travel time or distance using the "travelling salesman problem" algorithm.
