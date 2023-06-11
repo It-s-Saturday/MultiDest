@@ -13,14 +13,11 @@ const MAX_STOPS = 7;
 
 export default function InputGroup() {
   const [inputCount, setInputCount] = useState(4);
-  const [result, setResult] = useState<string[]>([]);
+  const [finalPath, setFinalPath] = useState<string[]>([]);
   const [inputValues, setInputValues] = useState<string[]>([]);
-  const [directionsURL, setDirectionsURL] = useState<string>("");
-  const [computedTime, setComputedTime] = useState<number>(0);
   const [submitted, setSubmitted] = useState<boolean>(false);
-  const [status, setStatus] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
   const [checked, setChecked] = useState<boolean>(false);
+  const [data, setData] = useState<any>(null);
 
   const handleAdd = (): void => {
     if (inputCount === MAX_STOPS) {
@@ -41,7 +38,7 @@ export default function InputGroup() {
   const handleSubmit = (): void => {
     setSubmitted(true);
     setInputValues(inputValues);
-    setResult([]);
+    setFinalPath([]);
     fetch("/get_optimal_route", {
       method: "POST",
       headers: {
@@ -53,13 +50,10 @@ export default function InputGroup() {
       }),
     })
       .then((response) => {
-        response.json().then((data) => {
-          console.log(data);
-          setResult(data.path.map((value: string) => value));
-          setDirectionsURL(data.url);
-          setComputedTime(data.computation_time);
-          setMessage(data.message);
-          setStatus(data.status);
+        response.json().then((result) => {
+          console.log(result);
+          setData(result);
+          setFinalPath(result.path.map((value: string) => value));
           setSubmitted(false);
         });
       })
@@ -179,22 +173,22 @@ export default function InputGroup() {
             width={100}
           />
         )}
-        {result.length > 0 && (
+        {finalPath.length > 0 && (
           <>
-            Retrieved result in {computedTime} seconds.
+            Retrieved result in {data.computed_time} seconds.
             <ol>
-              {result.map((value, index) => {
+              {finalPath.map((value, index) => {
                 return <li key={index}>{value}</li>;
               })}
             </ol>
-            <a href={directionsURL} target="_blank" rel="noopener noreferrer">
+            <a href={data.url} target="_blank" rel="noopener noreferrer">
               See on Google Maps
             </a>
           </>
         )}
-        {result.length === 0 && (
+        {finalPath.length === 0 && (
           <p>
-            {message} <br />
+            {data?.message} <br />
           </p>
         )}
       </Box>
