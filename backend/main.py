@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.config.from_pyfile("settings.py")
 
 SUCCESS = "success"
+FAILURE = "failure"
 DEBUG = False
 
 api_url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
@@ -22,6 +23,7 @@ api_url = "https://maps.googleapis.com/maps/api/distancematrix/json?"
 def pr(*args):
     if DEBUG:
         print(*args)
+
 
 @app.route("/")
 def index():
@@ -50,46 +52,57 @@ def lookup(i_from, i_to, metric="duration"):
 
 @app.route("/get_optimal_route", methods=["POST"])
 def get_optimal_route():
-    with Timer("get_optimal_route") as t:
-        metric = "duration"
-        data = request.get_json()
-        list_of_stops = data["inputValues"]
-        origin_stop = list_of_stops[0]
-        intermediate_stops = list_of_stops[1:-1] if len(list_of_stops) > 2 else []
-        destination_stop = list_of_stops[-1]
+    data = request.get_json()
+    print(data)
+    if data["checked"]:
+        with Timer("get_optimal_route") as t:
+            metric = "duration"
+            list_of_stops = data["inputValues"]
+            origin_stop = list_of_stops[0]
+            intermediate_stops = list_of_stops[1:-1] if len(list_of_stops) > 2 else []
+            destination_stop = list_of_stops[-1]
 
-        valid_paths = [
-            [origin_stop] + list(intermediate_permutation) + [destination_stop]
-            for intermediate_permutation in list(permutations(intermediate_stops))
-        ]
+            valid_paths = [
+                [origin_stop] + list(intermediate_permutation) + [destination_stop]
+                for intermediate_permutation in list(permutations(intermediate_stops))
+            ]
 
-        if DEBUG:
+            if DEBUG:
+                for path in valid_paths:
+                    pr(path)
+            min_cost = math.inf
+            min_cost_path = []
+
             for path in valid_paths:
-                pr(path)
-        min_cost = math.inf
-        min_cost_path = []
+                cost = 0
+                for i in range(len(path) - 1):
+                    cost += lookup(path[i], path[i + 1], metric)
+                if cost < min_cost:
+                    min_cost = cost
+                    min_cost_path = path
+                pr(f"Cost of {path} is {cost}")
 
-        for path in valid_paths:
-            cost = 0
-            for i in range(len(path) - 1):
-                cost += lookup(path[i], path[i + 1], metric)
-            if cost < min_cost:
-                min_cost = cost
-                min_cost_path = path
-            pr(f"Cost of {path} is {cost}")
+            url = "https://www.google.com/maps/dir/"
+            url += "/".join(min_cost_path).replace(" ", "+")
 
-        url = "https://www.google.com/maps/dir/"
-        url += "/".join(min_cost_path).replace(" ", "+")
-
-    out =        {
+        out = {
             "path": min_cost_path,
             "cost": min_cost,
             "url": url,
             "computation_time": t.elapsed,
             "status": SUCCESS,
         }
-    pr(out)
-    return jsonify(out)
+        pr(out)
+        return jsonify(out)
+    else:
+        # TODO: implement approximation algorithm
+        return jsonify(
+            {
+                "path": [],
+                "status": FAILURE,
+                "message": "Approximation algorithm not implemented yet.",
+            }
+        )
 
 
 @app.route("/server_status", methods=["GET"])
