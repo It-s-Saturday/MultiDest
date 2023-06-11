@@ -19,6 +19,7 @@ export default function InputGroup() {
   const [computedTime, setComputedTime] = useState<number>(0);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [status, setStatus] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
   const [checked, setChecked] = useState<boolean>(false);
 
   const handleAdd = (): void => {
@@ -57,7 +58,8 @@ export default function InputGroup() {
           setResult(data.path.map((value: string) => value));
           setDirectionsURL(data.url);
           setComputedTime(data.computation_time);
-          setStatus(data.message);
+          setMessage(data.message);
+          setStatus(data.status);
           setSubmitted(false);
         });
       })
@@ -160,8 +162,7 @@ export default function InputGroup() {
             );
           })}
           <Box>
-            <Checkbox 
-              onChange={() => setChecked(!checked)} />
+            <Checkbox onChange={() => setChecked(!checked)} />
             Get true optimal route? (May take longer to compute)
           </Box>
           <Button onClick={handleSubmit} disabled={!allInputsFilled}>
@@ -193,7 +194,7 @@ export default function InputGroup() {
         )}
         {result.length === 0 && (
           <p>
-            {status} <br />
+            {message} <br />
           </p>
         )}
       </Box>
