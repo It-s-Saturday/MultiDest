@@ -113,16 +113,6 @@ export default function InputGroup() {
             }
 
             return (
-              // <Autocomplete
-              //   key={index}
-              //   placeholder={placeholderText}
-              //   apiKey={'AIzaSyC5BHD35UU1JZrPYC4YnqdDCoi20H0GqbA'}
-              //   onPlaceSelected={(place) => {
-              //     const newInputValues = [...inputValues];
-              //     newInputValues[index] = place.formatted_address;
-              //     setInputValues(newInputValues);
-              //   }}
-              // />
               <Input
                 key={index}
                 placeholder={placeholderText}
